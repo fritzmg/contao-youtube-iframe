@@ -16,7 +16,7 @@ $GLOBALS['TL_LANG']['tl_content']['ytParams'] = array('Parameters','Some of the 
 $GLOBALS['TL_LANG']['tl_content']['ytParamsReference'] = array
 (
 	'cc'       => 'Show closed captions by default',
-	'white'    => 'Set progress bar color to white',
+	'white'    => 'White progress bar',
 	'fs'       => 'Disallow fullscreen',
 	'iv'       => 'Disable annotations by default',
 	'modest'   => 'Modest branding',

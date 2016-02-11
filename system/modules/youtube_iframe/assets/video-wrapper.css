@@ -1,18 +1,27 @@
 
+/* default 16:9 aspect ratio */
 .video-wrapper {
     position:relative;
     padding-bottom:56.25%;
     height:0;
 }
 
+/* 21:9 aspect ratio */
+.video-wrapper.ar219 {
+    padding-bottom:42.8571%;
+}
+
+/* 16:10 aspect ratio */
 .video-wrapper.ar1610 {
 	padding-bottom:62.5%;
 }
 
+/* 4:3 aspect ratio */
 .video-wrapper.ar43 {
 	padding-bottom:75%;
 }
 
+/* 1:1 aspect ratio */
 .video-wrapper.ar11 {
 	padding-bottom:100%;
 }

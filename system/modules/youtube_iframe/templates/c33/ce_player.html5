@@ -1,41 +1,11 @@
-<?php
-
-$ytParams = '';
-if( $this->type == 'youtube' )
-{
-  // generate parameters
-  $ytParams = array_map(function($v){ return  $GLOBALS['YT_PARAMS_MAPPING'][$v]; }, deserialize( $this->ytParams ));
-  if( $this->autoplay    ) $ytParams[] = 'autoplay=1';
-  if( $this->ytEnd       ) $ytParams[] = 'end='.$this->ytEnd;
-  if( $this->ytStart     ) $ytParams[] = 'start='.$this->ytStart;
-  if( $this->ytForceLang ) $ytParams[] = 'hl='.$GLOBALS['TL_LANGUAGE'];
-  if( $ytParams ) $ytParams = '?'.implode('&amp;', $ytParams);
-
-  // generate size information
-  $size = deserialize( $this->playerSize );
-  $arClass = '';
-  $this->size = '';
-  if( $size[0] > 0 && $size[1] > 0 )
-  {
-    $this->size = ' width="'.$size[0].'" height="'.$size[1].'"';
-    $ratio = $size[0] / $size[1];
-    $arClass = ' ar169';
-        if( $ratio < 1.1 ) $arClass = ' ar11';
-    elseif( $ratio < 1.5 ) $arClass = ' ar43';
-    elseif( $ratio < 1.7 ) $arClass = ' ar1610';
-  }
-}
-
-?>
-
 <?php $this->extend('block_searchable'); ?>
 
 <?php $this->block('content'); ?>
 
   <!-- indexer::stop -->
   <?php if( $this->type == 'youtube' ): ?>
-    <div class="video-wrapper<?php echo $arClass ?>">
-      <iframe<?php echo $this->size ?> type="text/html" src="https://www.youtube.com/embed/<?php echo $this->youtube ?><?php echo $ytParams ?>" frameborder="0" allowfullscreen></iframe>
+    <div class="video-wrapper<?php echo $this->arClass ?>">
+      <iframe<?php echo $this->size ?> type="text/html" src="https://www.youtube.com/embed/<?php echo $this->youtube ?><?php echo $this->ytStrParams ?>" frameborder="0" allowfullscreen></iframe>
     </div>
   <?php elseif ($this->isVideo): ?>
     <video<?php echo $this->size ?><?php if ($this->poster): ?> poster="<?php echo $this->poster ?>" preload="none"<?php endif; ?><?php if ($this->autoplay): ?> autoplay<?php endif; ?> controls>

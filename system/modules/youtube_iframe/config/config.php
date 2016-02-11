@@ -16,6 +16,7 @@
  * Hooks
  */
 $GLOBALS['TL_HOOKS']['getPageLayout'][] = array('YouTubeIframe','getPageLayout');
+$GLOBALS['TL_HOOKS']['parseTemplate'][] = array('YouTubeIframe','parseTemplate');
 
 
 /**
