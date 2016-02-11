@@ -13,6 +13,16 @@
 
 
 /**
+ * Config
+ */
+$arrCallbacks = array( array('tl_content_youtube_iframe', 'showJsLibraryHint') );
+foreach( $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] as $callback )
+    if( $callback[1] != 'showJsLibraryHint' )
+        $arrCallbacks[] = $callback;
+$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] = $arrCallbacks;
+
+
+/**
  * Palettes
  */
 $GLOBALS['TL_DCA']['tl_content']['palettes']['youtube'] = str_replace('{poster_legend:hide},posterSRC;', '', $GLOBALS['TL_DCA']['tl_content']['palettes']['youtube']);
@@ -62,3 +72,74 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['ytForceLang'] = array
     'eval'          => array('tl_class'=>'w50'),
     'sql'           => "char(1) NOT NULL default ''"
 );
+
+
+/**
+ * Helper class
+ */
+class tl_content_youtube_iframe extends \Backend
+{
+    /**
+     * Import the back end user object
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->import('BackendUser', 'User');
+    }
+
+    /**
+     * Show a hint if a JavaScript library needs to be included in the page layout
+     *
+     * @param object
+     */
+    public function showJsLibraryHint($dc)
+    {
+        if ($_POST || Input::get('act') != 'edit')
+        {
+            return;
+        }
+
+        // Return if the user cannot access the layout module (see #6190)
+        if (!$this->User->hasAccess('themes', 'modules') || !$this->User->hasAccess('layout', 'themes'))
+        {
+            return;
+        }
+
+        $objCte = \ContentModel::findByPk($dc->id);
+
+        if ($objCte === null)
+        {
+            return;
+        }
+
+        switch ($objCte->type)
+        {
+            case 'gallery':
+                Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplates'], 'moo_mediabox', 'j_colorbox'));
+                break;
+
+            case 'sliderStart':
+            case 'sliderStop':
+                Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplates'], 'moo_slider', 'j_slider'));
+                break;
+
+            case 'accordionSingle':
+            case 'accordionStart':
+            case 'accordionStop':
+                Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplates'], 'moo_accordion', 'j_accordion'));
+                break;
+
+            case 'player':
+                Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplate'], 'j_mediaelement'));
+                break;
+
+            case 'table':
+                if ($objCte->sortable)
+                {
+                    Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplates'], 'moo_tablesort', 'j_tablesort'));
+                }
+                break;
+        }
+    }
+}
