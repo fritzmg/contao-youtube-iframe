@@ -15,11 +15,14 @@
 /**
  * Config
  */
-$arrCallbacks = array( array('tl_content_youtube_iframe', 'showJsLibraryHint') );
-foreach( $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] as $callback )
-    if( $callback[1] != 'showJsLibraryHint' )
-        $arrCallbacks[] = $callback;
-$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] = $arrCallbacks;
+if( version_compare( VERSION, '3.1', '>=' ) )
+{
+    $arrCallbacks = array( array('tl_content_youtube_iframe', 'showJsLibraryHint') );
+    foreach( $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] as $callback )
+        if( $callback[1] != 'showJsLibraryHint' )
+            $arrCallbacks[] = $callback;
+    $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] = $arrCallbacks;
+}
 
 
 /**
