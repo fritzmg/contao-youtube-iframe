@@ -19,8 +19,17 @@ if( version_compare( VERSION, '3.1', '>=' ) )
 {
     $arrCallbacks = array( array('tl_content_youtube_iframe', 'showJsLibraryHint') );
     foreach( $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] as $callback )
-        if( $callback[1] != 'showJsLibraryHint' )
+    {
+        if( $callback instanceof Closure )
+        {
             $arrCallbacks[] = $callback;
+        }
+        elseif( is_array( $callback ) && count( $callback ) > 0 )
+        {
+            if( $callback[1] != 'showJsLibraryHint' )
+                $arrCallbacks[] = $callback;
+        }
+    }
     $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] = $arrCallbacks;
 }
 
