@@ -8,7 +8,7 @@
  * @package   youtube_iframe
  * @author    Fritz Michael Gschwantner <https://github.com/fritzmg>
  * @license   LGPL-3.0+
- * @copyright Fritz Michael Gschwantner 2016
+ * @copyright Fritz Michael Gschwantner 2016-2017
  */
 
 
