@@ -8,7 +8,7 @@
   <!-- indexer::stop -->
   <?php if( $this->type == 'youtube' ): ?>
     <div class="video-wrapper<?php echo $this->arClass ?>">
-      <iframe<?php echo $this->size ?> type="text/html" src="https://www.youtube.com/embed/<?php echo $this->youtube ?><?php echo $this->ytStrParams ?>" frameborder="0" allowfullscreen></iframe>
+      <iframe<?php echo $this->size ?> type="text/html" src="https://www.youtube.com/embed/<?php echo $this->youtube ?><?php echo $this->ytStrParams ?>" allowfullscreen></iframe>
     </div>
   <?php elseif ($this->isVideo): ?>
     <video<?php echo $this->size ?><?php if ($this->poster): ?> poster="<?php echo $this->poster ?>" preload="none"<?php endif; ?><?php if ($this->autoplay): ?> autoplay<?php endif; ?> controls>
