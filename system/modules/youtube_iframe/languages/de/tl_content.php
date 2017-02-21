@@ -26,3 +26,4 @@ $GLOBALS['TL_LANG']['tl_content']['ytParamsReference'] = array
 $GLOBALS['TL_LANG']['tl_content']['ytStart'] = array('Startpunkt','Optionaler Startpunkt des Videos in Sekunden.');
 $GLOBALS['TL_LANG']['tl_content']['ytEnd'] = array('Endpunkt','Optionaler Endpunkt des Videos in Sekunden.');
 $GLOBALS['TL_LANG']['tl_content']['ytForceLang'] = array('Seitensprache forcieren','Forciert die verwendete Sprache des Players auf die der Seite.');
+$GLOBALS['TL_LANG']['tl_content']['doctype_not_supported'] = 'Die <i>youtube_iframe</i> Extension unterstützt als Ausgabeformat im Seitenlayout nur <i>"HTML"</i>.';

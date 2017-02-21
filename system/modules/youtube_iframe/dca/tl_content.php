@@ -33,6 +33,9 @@ if( version_compare( VERSION, '3.1', '>=' ) )
     $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] = $arrCallbacks;
 }
 
+$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_youtube_iframe','outputFormatMsg');
+
+
 
 /**
  * Palettes
@@ -112,7 +115,7 @@ class tl_content_youtube_iframe extends \Backend
      */
     public function showJsLibraryHint($dc)
     {
-        if ($_POST || Input::get('act') != 'edit')
+        if ($_POST || \Input::get('act') != 'edit')
         {
             return;
         }
@@ -133,28 +136,28 @@ class tl_content_youtube_iframe extends \Backend
         switch ($objCte->type)
         {
             case 'gallery':
-                Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplates'], 'moo_mediabox', 'j_colorbox'));
+                \Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplates'], 'moo_mediabox', 'j_colorbox'));
                 break;
 
             case 'sliderStart':
             case 'sliderStop':
-                Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplates'], 'moo_slider', 'j_slider'));
+                \Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplates'], 'moo_slider', 'j_slider'));
                 break;
 
             case 'accordionSingle':
             case 'accordionStart':
             case 'accordionStop':
-                Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplates'], 'moo_accordion', 'j_accordion'));
+                \Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplates'], 'moo_accordion', 'j_accordion'));
                 break;
 
             case 'player':
-                Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplate'], 'j_mediaelement'));
+                \Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplate'], 'j_mediaelement'));
                 break;
 
             case 'table':
                 if ($objCte->sortable)
                 {
-                    Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplates'], 'moo_tablesort', 'j_tablesort'));
+                    \Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_content']['includeTemplates'], 'moo_tablesort', 'j_tablesort'));
                 }
                 break;
         }
@@ -178,5 +181,29 @@ class tl_content_youtube_iframe extends \Backend
         }
 
         return $varValue;
+    }
+
+
+    /**
+     * Adds an error if the doctype is not supported.
+     *
+     * @param \DataContainer $dc
+     *
+     * @return void
+     */
+    public function outputFormatMsg($dc)
+    {
+        if( ( $objCte = \ContentModel::findByPk($dc->id) ) !== null )
+        {
+            if( $objCte->type != 'youtube' )
+            {
+                return;
+            }
+        }
+
+        if( \DataBase::getInstance()->query("SELECT COUNT(*) as count FROM tl_layout WHERE doctype != 'html5'")->count > 0 )
+        {
+            \Message::addError($GLOBALS['TL_LANG']['tl_content']['doctype_not_supported']);
+        }
     }
 }

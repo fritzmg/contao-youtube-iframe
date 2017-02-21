@@ -26,3 +26,4 @@ $GLOBALS['TL_LANG']['tl_content']['ytParamsReference'] = array
 $GLOBALS['TL_LANG']['tl_content']['ytStart'] = array('Start time','Optional start of the video in seconds.');
 $GLOBALS['TL_LANG']['tl_content']['ytEnd'] = array('End time','Optional end of the video in seconds.');
 $GLOBALS['TL_LANG']['tl_content']['ytForceLang'] = array('Force page language','Force the language of the player to be the same as the page.');
+$GLOBALS['TL_LANG']['tl_content']['doctype_not_supported'] = 'The <i>youtube_iframe</i> extension only supports <i>"HTML"</i> as the output format in the page layout.';
