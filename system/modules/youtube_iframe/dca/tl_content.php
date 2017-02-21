@@ -44,6 +44,9 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['youtube'] = str_replace(',autoplay
 /**
  * Fields
  */
+$GLOBALS['TL_DCA']['tl_content']['fields']['youtube']['save_callback'][] = array('tl_content_youtube_iframe','extractId');
+$GLOBALS['TL_DCA']['tl_content']['fields']['youtube']['eval']['decodeEntities'] = true;
+
 $GLOBALS['TL_DCA']['tl_content']['fields']['ytParams'] = array
 (
     'label'         => &$GLOBALS['TL_LANG']['tl_content']['ytParams'],
@@ -91,6 +94,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['ytForceLang'] = array
  */
 class tl_content_youtube_iframe extends \Backend
 {
+
     /**
      * Import the back end user object
      */
@@ -99,6 +103,7 @@ class tl_content_youtube_iframe extends \Backend
         parent::__construct();
         $this->import('BackendUser', 'User');
     }
+
 
     /**
      * Show a hint if a JavaScript library needs to be included in the page layout
@@ -153,5 +158,25 @@ class tl_content_youtube_iframe extends \Backend
                 }
                 break;
         }
+    }
+
+
+    /**
+     * Extracts the YouTube video ID from the string.
+     *
+     * @param mixed $varValue
+     * @param \DataContainer $dc
+     *
+     * @return mixed
+     */
+    public function extractId($varValue, $dc)
+    {
+        // http://stackoverflow.com/a/6382259/374996
+        if( preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $varValue, $match) )
+        {
+            return $match[1];
+        }
+
+        return $varValue;
     }
 }
