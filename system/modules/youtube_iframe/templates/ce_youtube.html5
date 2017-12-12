@@ -1,0 +1,7 @@
+<?php $this->extend('block_unsearchable'); ?>
+
+<?php $this->block('content'); ?>
+  <div class="video-wrapper<?= $this->arClass ?>">
+    <iframe<?= $this->size ?> src="<?= $this->src ?><?= $this->ytStrParams ?>" frameborder="0" allowfullscreen></iframe>
+  </div>
+<?php $this->endblock(); ?>

@@ -1,37 +1,39 @@
 {
-	"name":"fritzmg/contao-youtube-iframe",
-	"description":"Simple Contao extension to integrate YouTube videos via iframe instead of the video tag.",
-	"keywords":["contao", "youtube", "iframe", "video"],
-	"type":"contao-module",
-	"homepage":"http://www.inspiredminds.at",
-	"license":"LGPL-3.0+",
-	"authors":[
-		{
-			"name":"Fritz Michael Gschwantner",
-			"homepage":"http://www.inspiredminds.at",
-			"email":"fmg@inspiredminds.at",
-			"role":"Developer"
-		}
-	],
-	"support":{
-		"email":"fmg@inspiredminds.at",
-		"issues":"https://github.com/fritzmg/contao-youtube-iframe/issues",
-		"source":"https://github.com/fritzmg/contao-youtube-iframe",
-		"forum":"https://community.contao.org/de"
-	},
-	"require":{
-		"php":">=5.2",
-		"contao/core-bundle":"~3.0 || ~4.2",
-		"contao-community-alliance/composer-plugin":"~2.4 || ~3.0"
-	},
-	"replace": {
-		"contao-legacy/youtube_iframe": "self.version"
-	},
-	"extra":{
-		"contao":{
-			"sources":{
-				"system/modules/youtube_iframe":"system/modules/youtube_iframe"
-			}
-		}
-	}
+    "name":"fritzmg/contao-youtube-iframe",
+    "description":"Simple Contao extension to integrate YouTube videos via iframe instead of the video tag.",
+    "keywords":["contao", "youtube", "iframe", "video"],
+    "type":"contao-module",
+    "homepage":"http://www.inspiredminds.at",
+    "license":"LGPL-3.0+",
+    "authors":[
+        {
+            "name":"Fritz Michael Gschwantner",
+            "homepage":"http://www.inspiredminds.at",
+            "email":"fmg@inspiredminds.at",
+            "role":"Developer"
+        }
+    ],
+    "support":{
+        "email":"fmg@inspiredminds.at",
+        "issues":"https://github.com/fritzmg/contao-youtube-iframe/issues",
+        "source":"https://github.com/fritzmg/contao-youtube-iframe",
+        "forum":"https://community.contao.org/de"
+    },
+    "require":{
+        "php": ">=5.2",
+        "contao/core-bundle": "^3.5|^4.2",
+        "contao-community-alliance/composer-plugin": "^2.4|^3.0",
+        "composer/semver": "^1.0",
+        "jean85/pretty-package-versions": "^1.0"
+    },
+    "replace": {
+        "contao-legacy/youtube_iframe": "self.version"
+    },
+    "extra":{
+        "contao":{
+            "sources":{
+                "system/modules/youtube_iframe":"system/modules/youtube_iframe"
+            }
+        }
+    }
 }

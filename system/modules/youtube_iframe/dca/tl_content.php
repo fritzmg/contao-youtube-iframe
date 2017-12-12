@@ -1,9 +1,12 @@
 <?php
 
+use Composer\Semver\Semver;
+use Contao\System;
+
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2016 Leo Feyer
+ * Copyright (c) 2005-2017 Leo Feyer
  *
  * @package   youtube_iframe
  * @author    Fritz Michael Gschwantner <https://github.com/fritzmg>
@@ -15,7 +18,7 @@
 /**
  * Config
  */
-if( version_compare( VERSION, '3.1', '>=' ) )
+if (version_compare(VERSION, '3.1', '>=') && !class_exists('Contao\CoreBundle\ContaoCoreBundle'))
 {
     $arrCallbacks = array( array('tl_content_youtube_iframe', 'showJsLibraryHint') );
     foreach( $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] as $callback )
@@ -36,19 +39,21 @@ if( version_compare( VERSION, '3.1', '>=' ) )
 $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_youtube_iframe','outputFormatMsg');
 
 
-
 /**
  * Palettes
  */
 $GLOBALS['TL_DCA']['tl_content']['palettes']['youtube'] = str_replace('{poster_legend:hide},posterSRC;', '', $GLOBALS['TL_DCA']['tl_content']['palettes']['youtube']);
-$GLOBALS['TL_DCA']['tl_content']['palettes']['youtube'] = str_replace(',autoplay', ',autoplay,ytParams,ytStart,ytEnd,ytForceLang,ytUseCSS', $GLOBALS['TL_DCA']['tl_content']['palettes']['youtube']);
+$GLOBALS['TL_DCA']['tl_content']['palettes']['youtube'] = str_replace(',autoplay', ',autoplay,ytParams,ytStart,ytEnd,ytForceLang', $GLOBALS['TL_DCA']['tl_content']['palettes']['youtube']);
 
 
 /**
  * Fields
  */
-$GLOBALS['TL_DCA']['tl_content']['fields']['youtube']['save_callback'][] = array('tl_content_youtube_iframe','extractId');
-$GLOBALS['TL_DCA']['tl_content']['fields']['youtube']['eval']['decodeEntities'] = true;
+if (!class_exists('Contao\CoreBundle\ContaoCoreBundle'))
+{
+    $GLOBALS['TL_DCA']['tl_content']['fields']['youtube']['save_callback'][] = array('tl_content_youtube_iframe','extractId');
+    $GLOBALS['TL_DCA']['tl_content']['fields']['youtube']['eval']['decodeEntities'] = true;
+}
 
 $GLOBALS['TL_DCA']['tl_content']['fields']['ytParams'] = array
 (
