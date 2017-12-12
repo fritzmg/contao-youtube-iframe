@@ -1,3 +1,7 @@
+[![](https://img.shields.io/maintenance/yes/2017.svg)](https://github.com/fritzmg/contao-youtube-iframe)
+[![](https://img.shields.io/packagist/v/fritzmg/contao-youtube-iframe.svg)](https://packagist.org/packages/fritzmg/contao-youtube-iframe)
+[![](https://img.shields.io/packagist/dt/fritzmg/contao-youtube-iframe.svg)](https://packagist.org/packages/fritzmg/contao-youtube-iframe)
+
 Contao YouTube Iframe
 =====================
 
