@@ -14,20 +14,13 @@
 
 class YouTubeIframe
 {
-	public function parseTemplate( \Template $objTemplate )
+	public function parseTemplate(\Template $objTemplate)
 	{
 		// check if this template has all required parameters
-		if( !$objTemplate->youtube || $objTemplate->type != 'youtube' )
+		if (!$objTemplate->youtube || $objTemplate->type != 'youtube')
+		{
 			return;
-
-		// generate parameters
-		$ytParams = deserialize( $objTemplate->ytParams );
-		$ytParams = is_array( $ytParams ) ? array_map(function($v){ return  $GLOBALS['YT_PARAMS_MAPPING'][$v]; }, $ytParams) : array();
-		if( $objTemplate->autoplay    ) $ytParams[] = 'autoplay=1';
-		if( $objTemplate->ytEnd       ) $ytParams[] = 'end='.$objTemplate->ytEnd;
-		if( $objTemplate->ytStart     ) $ytParams[] = 'start='.$objTemplate->ytStart;
-		if( $objTemplate->ytForceLang ) $ytParams[] = 'hl='.$GLOBALS['TL_LANGUAGE'];
-		$objTemplate->ytStrParams = $ytParams ? '?'.implode('&amp;', $ytParams) : '';
+		}
 
 		// generate size information
 		$size = deserialize( $objTemplate->playerSize );
@@ -43,11 +36,37 @@ class YouTubeIframe
 			elseif( $ratio > 1.3 ) $objTemplate->arClass = ' ar43';
 			else                   $objTemplate->arClass = ' ar11';
 		}
+
+		// check if we have the core-bundle
+		if (class_exists('Contao\CoreBundle\ContaoCoreBundle'))
+		{
+			// get the Contao version
+			$version = \Jean85\PrettyVersions::getVersion('contao/core-bundle');
+
+			// check for Contao >=4.5
+			if (\Composer\Semver\Semver::satisfies($version->getShortVersion(), '>=4.5'))
+			{
+				// no parameter generation needed
+				$objTemplate->ytStrParams = '';
+				return;
+			}
+		}
+
+		// generate parameters
+		$ytParams = deserialize($objTemplate->ytParams);
+		$ytParams = is_array($ytParams) ? array_map(function($v){ return  $GLOBALS['YT_PARAMS_MAPPING'][$v]; }, $ytParams) : array();
+		if( $objTemplate->autoplay    ) $ytParams[] = 'autoplay=1';
+		if( $objTemplate->ytEnd       ) $ytParams[] = 'end='.$objTemplate->ytEnd;
+		if( $objTemplate->ytStart     ) $ytParams[] = 'start='.$objTemplate->ytStart;
+		if( $objTemplate->ytForceLang ) $ytParams[] = 'hl='.$GLOBALS['TL_LANGUAGE'];
+		$objTemplate->ytStrParams = $ytParams ? '?'.implode('&amp;', $ytParams) : '';
 	}
 
-	public function getPageLayout( \PageModel $objPageModel, \LayoutModel $objLayout, \PageRegular $objPage )
+	public function getPageLayout(\PageModel $objPageModel, \LayoutModel $objLayout, \PageRegular $objPage)
 	{
-		if( $objLayout->ytUseCSS )
+		if ($objLayout->ytUseCSS)
+		{
 			$GLOBALS['TL_CSS'][] = 'system/modules/youtube_iframe/assets/video-wrapper.css|all|static';
+		}
 	}
 }

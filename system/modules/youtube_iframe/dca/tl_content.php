@@ -1,8 +1,5 @@
 <?php
 
-use Composer\Semver\Semver;
-use Contao\System;
-
 /**
  * Contao Open Source CMS
  *
@@ -13,6 +10,21 @@ use Contao\System;
  * @license   LGPL-3.0+
  * @copyright Fritz Michael Gschwantner 2016-2017
  */
+
+
+// check if we have the core-bundle
+if (class_exists('Contao\CoreBundle\ContaoCoreBundle'))
+{
+    // get the Contao version
+    $version = \Jean85\PrettyVersions::getVersion('contao/core-bundle');
+
+    // check for Contao >=4.5
+    if (\Composer\Semver\Semver::satisfies($version->getShortVersion(), '>=4.5'))
+    {
+        // no DCA change needed
+        return;
+    }
+}
 
 
 /**
