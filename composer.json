@@ -23,7 +23,8 @@
         "php": ">=5.2",
         "contao/core-bundle": "^3.5|^4.2",
         "contao-community-alliance/composer-plugin": "^2.4|^3.0",
-        "composer/semver": "^1.0"
+        "composer/semver": "^1.0",
+        "jean85/pretty-package-versions": "^1.0"
     },
     "replace": {
         "contao-legacy/youtube_iframe": "self.version"
