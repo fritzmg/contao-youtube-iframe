@@ -1,11 +1,11 @@
-<?php $this->extend('block_searchable'); ?>
+<?php $this->extend('ce_player'); ?>
 
 <?php $this->block('content'); ?>
 
   <!-- indexer::stop -->
   <?php if( $this->type == 'youtube' ): ?>
     <div class="video-wrapper<?= $this->arClass ?>">
-      <iframe<?= $this->size ?> src="https://www.youtube.com/embed/<?= $this->youtube ?><?= $this->ytStrParams ?>" frameborder="0" allowfullscreen></iframe>
+      <iframe<?= $this->size ?> src="https://www.youtube.com/embed/<?= $this->youtube ?><?= $this->ytStrParams ?>" allowfullscreen></iframe>
     </div>
   <?php elseif ($this->isVideo): ?>
     <video<?= $this->size ?><?php if ($this->poster): ?> poster="<?= $this->poster ?>" preload="none"<?php endif; ?><?php if ($this->autoplay): ?> autoplay<?php endif; ?> controls>
