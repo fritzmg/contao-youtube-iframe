@@ -27,5 +27,6 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['ytUseCSS'] = array
     'exclude'       => true,
     'inputType'     => 'checkbox',
     'default'       => false,
+    'eval'          => array('tl_class' => 'w50 m12'),
     'sql'           => "char(1) NOT NULL default ''"
 );
