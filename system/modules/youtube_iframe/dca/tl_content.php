@@ -12,7 +12,9 @@
  */
 
 
-// check if we have the core-bundle     // check if we have the core-bundle
+$blnAdjustDca = true;
+
+// check if we have the core-bundle
 if (class_exists('Contao\CoreBundle\ContaoCoreBundle'))
 {
     // get the Contao version
@@ -22,91 +24,94 @@ if (class_exists('Contao\CoreBundle\ContaoCoreBundle'))
     if (\Composer\Semver\Semver::satisfies($version->getShortVersion(), '>=4.5'))
     {
         // no DCA change needed
-        return;
+        $blnAdjustDca = false;
     }
 }
 
 
-/**
- * Config
- */
-if (version_compare(VERSION, '3.1', '>=') && !class_exists('Contao\CoreBundle\ContaoCoreBundle'))
+if ($blnAdjustDca)
 {
-    $arrCallbacks = array( array('tl_content_youtube_iframe', 'showJsLibraryHint') );
-    foreach( $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] as $callback )
+    /**
+     * Config
+     */
+    if (version_compare(VERSION, '3.1', '>=') && !class_exists('Contao\CoreBundle\ContaoCoreBundle'))
     {
-        if( $callback instanceof Closure )
+        $arrCallbacks = array( array('tl_content_youtube_iframe', 'showJsLibraryHint') );
+        foreach( $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] as $callback )
         {
-            $arrCallbacks[] = $callback;
-        }
-        elseif( is_array( $callback ) && count( $callback ) > 0 )
-        {
-            if( $callback[1] != 'showJsLibraryHint' )
+            if( $callback instanceof Closure )
+            {
                 $arrCallbacks[] = $callback;
+            }
+            elseif( is_array( $callback ) && count( $callback ) > 0 )
+            {
+                if( $callback[1] != 'showJsLibraryHint' )
+                    $arrCallbacks[] = $callback;
+            }
         }
+        $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] = $arrCallbacks;
     }
-    $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'] = $arrCallbacks;
+
+    $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_youtube_iframe','outputFormatMsg');
+
+
+    /**
+     * Palettes
+     */
+    $GLOBALS['TL_DCA']['tl_content']['palettes']['youtube'] = str_replace('{poster_legend:hide},posterSRC;', '', $GLOBALS['TL_DCA']['tl_content']['palettes']['youtube']);
+    $GLOBALS['TL_DCA']['tl_content']['palettes']['youtube'] = str_replace(',autoplay', ',autoplay,ytParams,ytStart,ytEnd,ytForceLang', $GLOBALS['TL_DCA']['tl_content']['palettes']['youtube']);
+
+
+    /**
+     * Fields
+     */
+    if (!class_exists('Contao\CoreBundle\ContaoCoreBundle'))
+    {
+        $GLOBALS['TL_DCA']['tl_content']['fields']['youtube']['save_callback'][] = array('tl_content_youtube_iframe','extractId');
+        $GLOBALS['TL_DCA']['tl_content']['fields']['youtube']['eval']['decodeEntities'] = true;
+    }
+
+    $GLOBALS['TL_DCA']['tl_content']['fields']['ytParams'] = array
+    (
+        'label'         => &$GLOBALS['TL_LANG']['tl_content']['ytParams'],
+        'exclude'       => true,
+        'inputType'     => 'checkbox',
+        'options'       => &$GLOBALS['YT_PARAMS'],
+        'reference'     => &$GLOBALS['TL_LANG']['tl_content']['ytParamsReference'],
+        'eval'          => array('multiple'=>true,'tl_class'=>'clr'),
+        'sql'           => 'blob NULL'
+    );
+
+    $GLOBALS['TL_DCA']['tl_content']['fields']['ytStart'] = array
+    (
+    	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['ytStart'],
+    	'default'                 => 0,
+    	'exclude'                 => true,
+    	'inputType'               => 'text',
+    	'eval'                    => array('rgxp'=>'natural', 'nospace'=>true, 'tl_class'=>'w50'),
+    	'sql'                     => "int(10) unsigned NOT NULL default '0'"
+    );
+
+    $GLOBALS['TL_DCA']['tl_content']['fields']['ytEnd'] = array
+    (
+    	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['ytEnd'],
+    	'default'                 => 0,
+    	'exclude'                 => true,
+    	'inputType'               => 'text',
+    	'eval'                    => array('rgxp'=>'natural', 'nospace'=>true, 'tl_class'=>'w50'),
+    	'sql'                     => "int(10) unsigned NOT NULL default '0'"
+    );
+
+    $GLOBALS['TL_DCA']['tl_content']['fields']['ytForceLang'] = array
+    (
+        'label'         => &$GLOBALS['TL_LANG']['tl_content']['ytForceLang'],
+        'exclude'       => true,
+        'inputType'     => 'checkbox',
+        'default'       => false,
+        'eval'          => array('tl_class'=>'w50'),
+        'sql'           => "char(1) NOT NULL default ''"
+    );
 }
-
-$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_youtube_iframe','outputFormatMsg');
-
-
-/**
- * Palettes
- */
-$GLOBALS['TL_DCA']['tl_content']['palettes']['youtube'] = str_replace('{poster_legend:hide},posterSRC;', '', $GLOBALS['TL_DCA']['tl_content']['palettes']['youtube']);
-$GLOBALS['TL_DCA']['tl_content']['palettes']['youtube'] = str_replace(',autoplay', ',autoplay,ytParams,ytStart,ytEnd,ytForceLang', $GLOBALS['TL_DCA']['tl_content']['palettes']['youtube']);
-
-
-/**
- * Fields
- */
-if (!class_exists('Contao\CoreBundle\ContaoCoreBundle'))
-{
-    $GLOBALS['TL_DCA']['tl_content']['fields']['youtube']['save_callback'][] = array('tl_content_youtube_iframe','extractId');
-    $GLOBALS['TL_DCA']['tl_content']['fields']['youtube']['eval']['decodeEntities'] = true;
-}
-
-$GLOBALS['TL_DCA']['tl_content']['fields']['ytParams'] = array
-(
-    'label'         => &$GLOBALS['TL_LANG']['tl_content']['ytParams'],
-    'exclude'       => true,
-    'inputType'     => 'checkbox',
-    'options'       => &$GLOBALS['YT_PARAMS'],
-    'reference'     => &$GLOBALS['TL_LANG']['tl_content']['ytParamsReference'],
-    'eval'          => array('multiple'=>true,'tl_class'=>'clr'),
-    'sql'           => 'blob NULL'
-);
-
-$GLOBALS['TL_DCA']['tl_content']['fields']['ytStart'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['ytStart'],
-	'default'                 => 0,
-	'exclude'                 => true,
-	'inputType'               => 'text',
-	'eval'                    => array('rgxp'=>'natural', 'nospace'=>true, 'tl_class'=>'w50'),
-	'sql'                     => "int(10) unsigned NOT NULL default '0'"
-);
-
-$GLOBALS['TL_DCA']['tl_content']['fields']['ytEnd'] = array
-(
-	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['ytEnd'],
-	'default'                 => 0,
-	'exclude'                 => true,
-	'inputType'               => 'text',
-	'eval'                    => array('rgxp'=>'natural', 'nospace'=>true, 'tl_class'=>'w50'),
-	'sql'                     => "int(10) unsigned NOT NULL default '0'"
-);
-
-$GLOBALS['TL_DCA']['tl_content']['fields']['ytForceLang'] = array
-(
-    'label'         => &$GLOBALS['TL_LANG']['tl_content']['ytForceLang'],
-    'exclude'       => true,
-    'inputType'     => 'checkbox',
-    'default'       => false,
-    'eval'          => array('tl_class'=>'w50'),
-    'sql'           => "char(1) NOT NULL default ''"
-);
 
 
 /**
