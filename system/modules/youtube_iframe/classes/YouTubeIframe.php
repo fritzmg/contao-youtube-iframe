@@ -55,11 +55,24 @@ class YouTubeIframe
 		// generate parameters
 		$ytParams = deserialize($objTemplate->ytParams);
 		$ytParams = is_array($ytParams) ? array_map(function($v){ return  $GLOBALS['YT_PARAMS_MAPPING'][$v]; }, $ytParams) : array();
-		if( $objTemplate->autoplay    ) $ytParams[] = 'autoplay=1';
 		if( $objTemplate->ytEnd       ) $ytParams[] = 'end='.$objTemplate->ytEnd;
 		if( $objTemplate->ytStart     ) $ytParams[] = 'start='.$objTemplate->ytStart;
 		if( $objTemplate->ytForceLang ) $ytParams[] = 'hl='.$GLOBALS['TL_LANGUAGE'];
-		$objTemplate->ytStrParams = $ytParams ? '?'.implode('&amp;', $ytParams) : '';
+
+		if (class_exists('Contao\CoreBundle\ContaoCoreBundle'))
+		{
+			$objTemplate->ytStrParams = $ytParams ? ($objTemplate->autoplay ? '&' : '?').implode('&amp;', $ytParams) : '';
+		}
+		else
+		{
+			if ($objTemplate->autoplay)
+			{
+				$ytParams[] = 'autoplay=1';
+			}
+
+			$objTemplate->ytStrParams = $ytParams ? '?'.implode('&amp;', $ytParams) : '';
+		}
+		
 	}
 
 	public function getPageLayout(\PageModel $objPageModel, \LayoutModel $objLayout, \PageRegular $objPage)
